@@ -1,17 +1,15 @@
 #include<stdio.h>
 
-#define MAX 250000
+#define MAX 100000
 
-int inputseq[MAX];
-int sortseq[MAX];
-
-void quickSort(int left, int right);
+void quickSort(int inputseq[], int left, int right);
 
 int main()
 {
 	int n;
-	int i, j;
-	int flag = 1;
+	int i;
+
+	int inputseq[MAX];
 
 	scanf("%d", &n);
 
@@ -20,70 +18,63 @@ int main()
 		scanf("%d", &inputseq[i]);
 	}
 
-	if (flag == 0)
-	{
-		printf("0");
-		return 0;
-	}
-
-	j = 0;
+	int a = -1;
+	int temp = 0;
 	for (i = 0; i < n; i++)
 	{
 		if (inputseq[i] <= n)
 		{
-			sortseq[j] = inputseq[i];
-			j++;
+			temp = (i - inputseq[i] + n) % n;
+			if (a < 0) a = temp;
+			else if (a != temp)
+			{
+				printf("0");
+				return 0;
+			}
 		}
+	
 	}
-	j--;
 
-	for (i = 0; i < j - 1; i++)
+	quickSort(inputseq, 0, n - 1);
+
+	for (i = 0; i < n - 1; i++)
 	{
-		if (sortseq[i] > sortseq[i + 1]) flag++;
-	}
-	if (sortseq[j - 1] > sortseq[0]) flag++;
-
-	quickSort(0,j);
-
-	for(i=0;i<j-1;i++)
-	{
-		if(inputseq[i]==inputseq[i+1])
+		if (inputseq[i] == inputseq[i + 1])
 		{
 			printf("0");
 			return 0;
 		}
 	}
-
-	if (flag == 2) printf("1");
-	else printf("0");
+	
+	printf("1");
 
 	return 0;
 }
 
-void quickSort(int left, int right) {
-      int i = left, j = right;
-      int pivot = inputseq[(left + right) / 2];
-      int temp;
-      do
-      {
-        while (inputseq[i] < pivot)
-            i++;
-        while (inputseq[j] > pivot)
-            j--;
-        if (i<= j)
-        {
-            temp = inputseq[i];
-            inputseq[i] = inputseq[j];
-            inputseq[j] = temp;
-            i++;
-            j--;
-        }
-      } while (i<= j);
+void quickSort(int inputseq[], int left, int right) {
+	int i = left, j = right;
+	int pivot = inputseq[(left + right) / 2];
+	int temp;
+	do
+	{
+		while (inputseq[i] < pivot)
+			i++;
+		while (inputseq[j] > pivot)
+			j--;
+		if (i <= j)
+		{
+			temp = inputseq[i];
+			inputseq[i] = inputseq[j];
+			inputseq[j] = temp;
+			i++;
+			j--;
+		}
+	} while (i <= j);
 
-    /* recursion */
-    if (left < j)
-        quickSort(left, j);
 
-    if (i < right)
-        quickSort(i, right);
+	if (left < j)
+		quickSort(inputseq, left, j);
+
+	if (i < right)
+		quickSort(inputseq, i, right);
 }
